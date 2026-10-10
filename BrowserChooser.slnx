@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BrowserChooser.Core/BrowserChooser.Core.csproj" />
+    <Project Path="src/BrowserChooser/BrowserChooser.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BrowserChooser.Core.Tests/BrowserChooser.Core.Tests.csproj" />
+  </Folder>
+</Solution>
