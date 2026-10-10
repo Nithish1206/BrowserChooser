@@ -6,7 +6,7 @@ namespace BrowserChooser.UI.Chooser;
 
 /// <summary>
 /// The browser picker window, built to match the Windows 11 "Select an app to open this file" dialog: no title
-/// bar, rounded corners, a list of choices and "Close" / "Open" buttons in a darker footer.
+/// bar, rounded corners and a list of choices; clicking one opens the link. A darker footer holds "Cancel".
 /// </summary>
 internal sealed class ChooserForm : Form
 {
@@ -18,15 +18,13 @@ internal sealed class ChooserForm : Form
     private const int LinkHeight = 18;
     private const int FooterHeight = 60;
     private const int ButtonHeight = 32;
-    private const int ButtonGap = 8;
     private const int MaxWindowHeight = 640;
     private const string Title = "Select a browser to open this link";
 
     private readonly ChooserTheme _theme;
     private readonly string _link;
     private readonly ChooserListControl _list;
-    private readonly ChooserButton _closeButton;
-    private readonly ChooserButton _openButton;
+    private readonly ChooserButton _cancelButton;
     private readonly ToolTip _toolTip = new();
 
     private ChooserFonts? _fonts;
@@ -55,18 +53,14 @@ internal sealed class ChooserForm : Form
 
         _list = new ChooserListControl(theme, icons) { TabIndex = 0 };
         _list.SetSections(sections, selected);
+        // One click on a browser opens the link; there is no separate "Open" step.
         _list.EntryActivated += (_, _) => Choose();
 
-        _closeButton = new ChooserButton(theme, theme.StandardButton, "Close") { TabIndex = 1 };
-        _closeButton.Click += (_, _) => DialogResult = DialogResult.Cancel;
-
-        // The primary action uses the Windows accent colour, like the system's own dialogs.
-        _openButton = new ChooserButton(theme, theme.AccentButton, "Open") { TabIndex = 2 };
-        _openButton.Click += (_, _) => Choose();
+        _cancelButton = new ChooserButton(theme, theme.StandardButton, "Cancel") { TabIndex = 1 };
+        _cancelButton.Click += (_, _) => DialogResult = DialogResult.Cancel;
 
         Controls.Add(_list);
-        Controls.Add(_closeButton);
-        Controls.Add(_openButton);
+        Controls.Add(_cancelButton);
 
         // Create the window on the monitor the user is working on, so it gets that monitor's DPI from the start.
         Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
@@ -262,8 +256,7 @@ internal sealed class ChooserForm : Form
         int dpi = DeviceDpi;
         var fonts = new ChooserFonts(dpi);
         _list.ApplyScale(dpi, fonts);
-        _closeButton.ApplyScale(dpi, fonts);
-        _openButton.ApplyScale(dpi, fonts);
+        _cancelButton.ApplyScale(dpi, fonts);
         _fonts?.Dispose();
         _fonts = fonts;
 
@@ -280,13 +273,10 @@ internal sealed class ChooserForm : Form
 
         _list.Bounds = new Rectangle(0, headerHeight, width, listHeight);
 
-        // Two equal buttons, like the system dialog: Close on the left, Open on the right.
-        int gap = S(ButtonGap);
+        // Cancel spans the footer.
         int buttonHeight = S(ButtonHeight);
         int buttonTop = headerHeight + listHeight + ((footerHeight - buttonHeight) / 2);
-        int buttonWidth = (width - (padding * 2) - gap) / 2;
-        _closeButton.Bounds = new Rectangle(padding, buttonTop, buttonWidth, buttonHeight);
-        _openButton.Bounds = new Rectangle(padding + buttonWidth + gap, buttonTop, width - (padding * 2) - gap - buttonWidth, buttonHeight);
+        _cancelButton.Bounds = new Rectangle(padding, buttonTop, width - (padding * 2), buttonHeight);
 
         _linkBounds = new Rectangle(padding, S(TitleTop + TitleHeight), width - (padding * 2), S(LinkHeight));
         _linkIsTruncated = TextRenderer.MeasureText(_link, fonts.Caption, Size.Empty, Painting.SingleLine).Width > _linkBounds.Width;

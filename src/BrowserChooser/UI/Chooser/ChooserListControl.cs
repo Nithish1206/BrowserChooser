@@ -56,7 +56,7 @@ internal sealed class ChooserListControl : Control
         AccessibleName = "Browsers";
     }
 
-    /// <summary>Raised when a row is double-clicked.</summary>
+    /// <summary>Raised when a row is clicked; the selected row is the one that was clicked.</summary>
     public event EventHandler? EntryActivated;
 
     public BrowserTarget? SelectedTarget => _selectedEntry >= 0 ? _rows[_entryRows[_selectedEntry]].Target : null;
@@ -169,17 +169,16 @@ internal sealed class ChooserListControl : Control
     protected override void OnMouseUp(MouseEventArgs e)
     {
         base.OnMouseUp(e);
-        if (_pressedEntry >= 0)
-        {
-            _pressedEntry = -1;
-            Invalidate();
-        }
-    }
+        int pressed = _pressedEntry;
+        if (pressed < 0)
+            return;
 
-    protected override void OnMouseDoubleClick(MouseEventArgs e)
-    {
-        base.OnMouseDoubleClick(e);
-        if (e.Button == MouseButtons.Left && EntryAt(e.Location) is var entry && entry >= 0 && entry == _selectedEntry)
+        _pressedEntry = -1;
+        Invalidate();
+
+        // A click opens the link. Like a button, it counts only if released over the row that was pressed, so
+        // dragging off the row backs out.
+        if (e.Button == MouseButtons.Left && EntryAt(e.Location) == pressed)
             EntryActivated?.Invoke(this, EventArgs.Empty);
     }
 

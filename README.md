@@ -4,8 +4,8 @@ A small Windows 11 app that asks **which browser and profile** should open each 
 picker styled like the Windows "Select an app to open this file" dialog, with one row per browser profile
 ("Microsoft Edge · Work", "Google Chrome · Personal", …).
 
-Select a row and press **Open** (or double-click it, or press Enter). **Close**, Esc or clicking anywhere
-outside the picker dismisses it without opening anything; switching away with Alt+Tab leaves it open. Your previous choice is listed first under **Last used** and preselected, so
+Click a browser to open the link there, or move with the arrow keys and press Enter. **Cancel**, Esc or clicking
+anywhere outside the picker dismisses it without opening anything; switching away with Alt+Tab leaves it open. Your previous choice is listed first under **Last used** and preselected, so
 opening a link the same way as last time is one click or one Enter.
 
 Browsers and profiles are found again on every click, so newly installed browsers and new profiles appear

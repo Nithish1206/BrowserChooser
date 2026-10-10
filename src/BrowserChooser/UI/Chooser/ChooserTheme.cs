@@ -20,7 +20,6 @@ internal sealed record ChooserTheme(
     Color RowPressed,
     Color Accent,
     ButtonColors StandardButton,
-    ButtonColors AccentButton,
     Color ScrollThumb,
     Color FocusStroke)
 {
@@ -66,14 +65,6 @@ internal sealed record ChooserTheme(
                 BorderTop: Blend(footer, white, 0.093),
                 BorderBottom: Blend(footer, white, 0.070),
                 Text: white),
-            // Windows' own accent buttons: the accent fill, a little transparent on hover and press, black text.
-            AccentButton: new ButtonColors(
-                Fill: accent,
-                FillHover: Blend(footer, accent, 0.9),
-                FillPressed: Blend(footer, accent, 0.8),
-                BorderTop: Blend(accent, white, 0.08),
-                BorderBottom: Blend(accent, Color.Black, 0.14),
-                Text: Color.Black),
             ScrollThumb: Blend(background, white, 0.544),
             FocusStroke: white);
     }
@@ -102,14 +93,6 @@ internal sealed record ChooserTheme(
                 BorderTop: Blend(footer, black, 0.058),
                 BorderBottom: Blend(footer, black, 0.162),
                 Text: Blend(background, black, 0.896)),
-            // Windows' own accent buttons: the accent fill, a little transparent on hover and press, white text.
-            AccentButton: new ButtonColors(
-                Fill: accent,
-                FillHover: Blend(footer, accent, 0.9),
-                FillPressed: Blend(footer, accent, 0.8),
-                BorderTop: Blend(accent, Color.White, 0.08),
-                BorderBottom: Blend(accent, black, 0.40),
-                Text: Color.White),
             ScrollThumb: Blend(background, black, 0.446),
             FocusStroke: Blend(background, black, 0.896));
     }
